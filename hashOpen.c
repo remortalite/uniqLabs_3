@@ -66,7 +66,7 @@ int main() {
 	searchOpenAddrLinear(key, hashTable, m);
 
 	printf("\nSearch in quadratic:\n");
-	searchOpenAddrLinear(key, hashTable2, m);
+	searchOpenAddrQuadratic(key, hashTable2, m);
 
 
 	if (TABLE) {
