@@ -84,6 +84,15 @@ void showPage(Record* base, int page) {
 	printf("\n\n\e[3mPress 'd' for next page\nPress 'a' for previous page\n\e[0m");
 }
 */
+
+void printHelp() {
+	printf("\n\n\e[3mPress 'd' for the next page\n" \
+					"Press 'a' for the previous page\n" \
+					"Press 'l' for the last page\n" \
+					"Press 'k' for the first page\n" \
+					"Press 'q' to exit\n\e[0m");
+}
+
 void showPageList(Node* list, int page) {
 	int N = RECONPAGE;
 	int idx = page*N;
@@ -100,9 +109,7 @@ void showPageList(Node* list, int page) {
 		list = list->next;
 	}
 
-	printf("\n\n\e[3mPress 'd' for next page\n" \
-					"Press 'a' for previous page\n" \
-					"Press 'q' to exit\n\e[0m");
+	printHelp();
 }
 
 void clearScreen() {
@@ -151,6 +158,16 @@ void showList(Node* list) {
 				case 'a':
 					clearScreen();
 					if ((page-1) >= 0) --page;
+					showPageList(list, page);
+					break;
+				case 'l':
+					clearScreen();
+					page = 4000/N+(4000%N?1:0) - 1;
+					showPageList(list, page);
+					break;
+				case 'k':
+					clearScreen();
+					page = 0;
 					showPageList(list, page);
 					break;
 				default:
