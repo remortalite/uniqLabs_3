@@ -16,12 +16,19 @@ struct record {
 };
 
 typedef struct record2 {
-	char person[64];
-	char street[36];
+	char person[32*2];
+	char street[18*2];
 	short int house;
 	short int apt;
-	char date[20];
+	char date[10*2];
 } Record;
+
+typedef struct node Node;
+struct node {
+	Record data;
+	Node* next;
+	Node* prev;
+};
 
 void from_866_to_utf8(char *in, size_t *sizein, char *out, size_t *sizeout) {
 	iconv_t cd = iconv_open("UTF-8", "CP866");
@@ -65,7 +72,7 @@ void printRecord(Record record) {
 					record.date
 					);	
 }
-
+/*
 void showPage(Record* base, int page) {
 	int N = RECONPAGE;
 	int idx = page*N;
@@ -76,13 +83,32 @@ void showPage(Record* base, int page) {
 
 	printf("\n\n\e[3mPress 'd' for next page\nPress 'a' for previous page\n\e[0m");
 }
+*/
+void showPageList(Node* list, int page) {
+	int N = RECONPAGE;
+	int idx = page*N;
+	printf("Page %d.\n", page);
+	
+	int count = 0;
+	while (count < idx && count < 4000) {
+		list = list->next;
+		++count;
+	}
+
+	for (int i = idx; i < (idx+N) && i < 4000; ++i) {
+		printRecord(list->data);
+		list = list->next;
+	}
+
+	printf("\n\n\e[3mPress 'd' for next page\nPress 'a' for previous page\n\e[0m");
+}
 
 void clearScreen() {
 	#ifndef ALL
 	system("clear");
 	#endif
 }
-
+/*
 void show(Record* base) {
 	char c;
 	int page = 0;
@@ -90,19 +116,66 @@ void show(Record* base) {
 	clearScreen();
 	showPage(base, page);
 	while ((c = getc(stdin)) != 'q') {
+		clearScreen();
 		switch(c) {
 				case 'd':
-					clearScreen();
 					if ((page+1) < (4000/N + (4000%N ? 1 : 0))) ++page;
-					showPage(base, page);
 					break;
 				case 'a':
-					clearScreen();
 					if ((page-1) >= 0) --page;
-					showPage(base, page);
+					break;
+				default:
 					break;
 		}
+		showPage(base, page);
 	}
+}
+*/
+void showList(Node* list) {
+	char c;
+	int page = 0;
+	int N = RECONPAGE;
+	clearScreen();
+	showPageList(list, page);
+	while ((c = getc(stdin)) != 'q') {
+		clearScreen();
+		switch(c) {
+				case 'd':
+					if ((page+1) < (4000/N + (4000%N ? 1 : 0))) ++page;
+					break;
+				case 'a':
+					if ((page-1) >= 0) --page;
+					break;
+				default:
+					break;
+		}
+		showPageList(list, page);
+	}
+}
+
+
+Node* createNode() {
+	Node* node = calloc(sizeof(Node), 1);
+	node->next = NULL;
+	node->prev = NULL;
+	return node;
+}
+
+Node* createList(Record* base) {
+	Node* list = createNode();
+	Node* head = list;
+	list->data = (base[0]);
+	list->prev = NULL;
+	Node* prev;
+	for (int i = 1; i < 4000; ++i) {
+		list->next = createNode();
+		prev = list;
+		list = list->next;
+
+		list->data = (base[i]);
+		list->prev = prev;
+	}
+	return head;
 }
 
 int main() {
@@ -121,7 +194,15 @@ int main() {
 	fclose(fp);
 	free(base);
 
-	show(base2);
+	Record* baseArr = base2;
+
+	//show(base2);
+	
+	Node* list = createList(baseArr);
+
+	//printRecord(list->data);
+
+	showList(list);
 
 	return 0;
 }
