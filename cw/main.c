@@ -3,6 +3,8 @@
 #include <string.h>
 #include <iconv.h>
 
+#define RECNUM 4000
+
 #ifndef RECONPAGE
 #define RECONPAGE 10
 #endif
@@ -27,7 +29,6 @@ typedef struct node Node;
 struct node {
 	Record data;
 	Node* next;
-	Node* prev;
 };
 
 void from_866_to_utf8(char *in, size_t *sizein, char *out, size_t *sizeout) {
@@ -36,7 +37,7 @@ void from_866_to_utf8(char *in, size_t *sizein, char *out, size_t *sizeout) {
 }
 
 void decode(struct record2* base2, struct record* base) {
-	for (int i = 0; i < 4000; ++i) {
+	for (int i = 0; i < RECNUM; ++i) {
 			size_t sizein = sizeof(base[i].person);
 			size_t sizeout = sizeof(base2[i].person);
 			char *in = calloc(sizeof(char), sizein);
@@ -72,18 +73,6 @@ void printRecord(Record record) {
 					record.date
 					);	
 }
-/*
-void showPage(Record* base, int page) {
-	int N = RECONPAGE;
-	int idx = page*N;
-	printf("Page %d.\n", page);
-	for (int i = idx; i < (idx + N) && i < 4000; ++i) {
-		printRecord(base[i]);
-	}
-
-	printf("\n\n\e[3mPress 'd' for next page\nPress 'a' for previous page\n\e[0m");
-}
-*/
 
 void printHelp() {
 	printf("\n\n\e[3mPress 'd' for the next page\n" \
@@ -99,12 +88,12 @@ void showPageList(Node* list, int page) {
 	printf("Page %d.\n", page);
 	
 	int count = 0;
-	while (count < idx && count < 4000) {
+	while (count < idx && count < RECNUM) {
 		list = list->next;
 		++count;
 	}
 
-	for (int i = idx; i < (idx+N) && i < 4000; ++i) {
+	for (int i = idx; i < (idx+N) && i < RECNUM; ++i) {
 		printRecord(list->data);
 		list = list->next;
 	}
@@ -117,31 +106,7 @@ void clearScreen() {
 	system("clear");
 	#endif
 }
-/*
-void show(Record* base) {
-	char c;
-	int page = 0;
-	int N = RECONPAGE;
-	clearScreen();
-	showPage(base, page);
-	while ((c = getc(stdin)) != 'q') {
-		switch(c) {
-				case 'd':
-					clearScreen();
-					if ((page+1) < (4000/N + (4000%N ? 1 : 0))) ++page;
-					showPage(base, page);
-					break;
-				case 'a':
-					clearScreen();
-					if ((page-1) >= 0) --page;
-					showPage(base, page);
-					break;
-				default:
-					break;
-		}
-	}
-}
-*/
+
 void showList(Node* list) {
 	char c;
 	int page = 0;
@@ -152,7 +117,7 @@ void showList(Node* list) {
 		switch(c) {
 				case 'd':
 					clearScreen();
-					if ((page+1) < (4000/N + (4000%N ? 1 : 0))) ++page;
+					if ((page+1) < (RECNUM/N + (RECNUM%N ? 1 : 0))) ++page;
 					showPageList(list, page);
 					break;
 				case 'a':
@@ -162,7 +127,7 @@ void showList(Node* list) {
 					break;
 				case 'l':
 					clearScreen();
-					page = 4000/N+(4000%N?1:0) - 1;
+					page = RECNUM/N+(RECNUM%N?1:0) - 1;
 					showPageList(list, page);
 					break;
 				case 'k':
@@ -180,7 +145,6 @@ void showList(Node* list) {
 Node* createNode() {
 	Node* node = calloc(sizeof(Node), 1);
 	node->next = NULL;
-	node->prev = NULL;
 	return node;
 }
 
@@ -188,15 +152,11 @@ Node* createList(Record* base) {
 	Node* list = createNode();
 	Node* head = list;
 	list->data = (base[0]);
-	list->prev = NULL;
-	Node* prev;
-	for (int i = 1; i < 4000; ++i) {
+	for (int i = 1; i < RECNUM; ++i) {
 		list->next = createNode();
-		prev = list;
 		list = list->next;
 
 		list->data = (base[i]);
-		list->prev = prev;
 	}
 	return head;
 }
@@ -205,25 +165,17 @@ int main() {
 	FILE *fp;
 	fp = fopen("testBase4.dat", "rb");
 
-	struct record* base = calloc(sizeof(struct record), 4000);
-	struct record2* base2 = calloc(sizeof(struct record2), 4000);
+	struct record* base = calloc(sizeof(struct record), RECNUM);
+	struct record2* base2 = calloc(sizeof(struct record2), RECNUM);
 
-	int i = fread((struct record *) base, sizeof(struct record), 4000, fp);
-	if (i != 4000) fprintf(stderr, "Some errors with reading from .dat file\n");
+	int i = fread((struct record *) base, sizeof(struct record), RECNUM, fp);
+	if (i != RECNUM) fprintf(stderr, "Some errors with reading from .dat file\n");
 
-	// decode from cp866 to utf-8
 	decode(base2, base);
-
 	fclose(fp);
 	free(base);
 
-	Record* baseArr = base2;
-
-	//show(base2);
-	
-	Node* list = createList(baseArr);
-
-	//printRecord(list->data);
+	Node* list = createList((Record*)base2);
 
 	showList(list);
 
