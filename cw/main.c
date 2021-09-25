@@ -109,41 +109,17 @@ int main() {
 	FILE *fp;
 	fp = fopen("testBase4.dat", "rb");
 
-	//struct record base[4000] = { 0 };
 	struct record* base = calloc(sizeof(struct record), 4000);
 	struct record2* base2 = calloc(sizeof(struct record2), 4000);
-	//struct record2* base2[4000] = { 0 };
 
 	int i = fread((struct record *) base, sizeof(struct record), 4000, fp);
 	if (i != 4000) fprintf(stderr, "Some errors with reading from .dat file\n");
 
-	fclose(fp);
-
-	/*
-	for (i = 0; i < 4; ++i) {
-		printf("'%s'='%s'='%4d' %4d %s\n",
-			base[i].person,
-			base[i].street,
-			base[i].house,
-			base[i].apt,
-			base[i].date
-			);
-	}
-	printf("--------------\n");
-	*/
-
+	// decode from cp866 to utf-8
 	decode(base2, base);
-	/*
-	for (i = 0; i < 4; ++i) {
-		printf("%s ... %s ... %4d ... %4d ... %s\n",
-			base2[i].person,
-			base2[i].street,
-			base2[i].house,
-			base2[i].apt,
-			base2[i].date
-			);
-	}
-	*/
+
+	fclose(fp);
+	free(base);
 
 	show(base2);
 
