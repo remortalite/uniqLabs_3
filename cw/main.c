@@ -100,7 +100,9 @@ void showPageList(Node* list, int page) {
 		list = list->next;
 	}
 
-	printf("\n\n\e[3mPress 'd' for next page\nPress 'a' for previous page\n\e[0m");
+	printf("\n\n\e[3mPress 'd' for next page\n" \
+					"Press 'a' for previous page\n" \
+					"Press 'q' to exit\n\e[0m");
 }
 
 void clearScreen() {
@@ -116,18 +118,20 @@ void show(Record* base) {
 	clearScreen();
 	showPage(base, page);
 	while ((c = getc(stdin)) != 'q') {
-		clearScreen();
 		switch(c) {
 				case 'd':
+					clearScreen();
 					if ((page+1) < (4000/N + (4000%N ? 1 : 0))) ++page;
+					showPage(base, page);
 					break;
 				case 'a':
+					clearScreen();
 					if ((page-1) >= 0) --page;
+					showPage(base, page);
 					break;
 				default:
 					break;
 		}
-		showPage(base, page);
 	}
 }
 */
@@ -138,18 +142,20 @@ void showList(Node* list) {
 	clearScreen();
 	showPageList(list, page);
 	while ((c = getc(stdin)) != 'q') {
-		clearScreen();
 		switch(c) {
 				case 'd':
+					clearScreen();
 					if ((page+1) < (4000/N + (4000%N ? 1 : 0))) ++page;
+					showPageList(list, page);
 					break;
 				case 'a':
+					clearScreen();
 					if ((page-1) >= 0) --page;
+					showPageList(list, page);
 					break;
 				default:
 					break;
 		}
-		showPageList(list, page);
 	}
 }
 
