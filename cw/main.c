@@ -9,6 +9,10 @@
 #define RECONPAGE 10
 #endif
 
+#include "struct.h"
+#include "mergeSort.h"
+
+/*
 struct record {
 	char person[32];
 	char street[18];
@@ -30,7 +34,7 @@ struct node {
 	Record data;
 	Node* next;
 };
-
+*/
 void from_866_to_utf8(char *in, size_t *sizein, char *out, size_t *sizeout) {
 	iconv_t cd = iconv_open("UTF-8", "CP866");
 	iconv(cd, &in, sizein, &out, sizeout);
@@ -177,6 +181,7 @@ int main() {
 
 	Node* list = createList((Record*)base2);
 
+	mergeSort(&list, 4000);
 	showList(list);
 
 	return 0;
