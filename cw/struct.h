@@ -19,8 +19,14 @@ typedef struct record2 {
 
 typedef struct node Node;
 struct node {
-    Record data;
+    Record* pdata;
     Node* next;
 };
+
+typedef enum SORTTYPE {
+	sortDate,
+	sortStreet,
+	sortDateStreet
+} tSortType;
 
 #endif // #ifndef STRUCT_H

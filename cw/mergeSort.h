@@ -7,21 +7,41 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int isStreetLessEq(Record a, Record b) {
+int isStreetLessEq(Record* a, Record* b) {
 	for (int i = 0; i < 18*2; ++i) {
-		if (a.street[i] > b.street[i])
+		if (a->street[i] > b->street[i])
 			return 0;
-		if (a.street[i] < b.street[i])
+		if (a->street[i] < b->street[i])
 			return 1;
 	}
-	return 1;
+	return 2;
 }
 
-int fromLtoQ(List **list, Que *que) {
-	int CM = 0;
+int isDateLessEq(Record* a, Record* b) {
+	for (int i = 2; i >= 0; --i) {
+		if (a->date[i*3] > b->date[i*3])
+			return 0;
+		if (a->date[i*3] < b->date[i*3])
+			return 1;
+		if (a->date[i*3+1] > b->date[i*3+1])
+			return 0;
+		if (a->date[i*3+1] < b->date[i*3+1])
+			return 1;
+	}
+	return 2;
+}
+
+int isDateStreetLessEq(Record* a, Record* b) {
+	int answer;
+	answer = isDateLessEq(a, b);
+	if (answer == 2)
+    	answer = isStreetLessEq(a, b);
+	return answer;
+}
+
+void fromLtoQ(List **list, Que *que) {
 	if ((*que).head == NULL) {
-		Record rec0 = {0};
-		addQue(*que, rec0);
+		addQue(*que, NULL);
 		(*que).head = *list; 
 		(*que).tail = (*que).head; 
 	} else {
@@ -29,59 +49,51 @@ int fromLtoQ(List **list, Que *que) {
 		(*que).tail = *list; 
 	}
 	(*list) = (*list)->next; 
-	return CM;
 }
 
-int mergeSeries(List **a, int q, List **b, int r, Que *c) {
-	int CM = 0;
+void mergeSeries(List **a, int q, List **b, int r, Que *c, int (*funcComp)(Record*, Record*)) {
 	while (q != 0 && r != 0) {
-		CM++;
-		if (isStreetLessEq((*a)->data, (*b)->data)) {
-			fromLtoQ(a, c); CM++; CM++;
+		if (funcComp((*a)->pdata, (*b)->pdata)) {
+			fromLtoQ(a, c);
 			q--;
 		} else {
-			fromLtoQ(b, c); CM++; CM++;
+			fromLtoQ(b, c);
 			r--;
 		}
 	}
 	while (q > 0) {
-		CM += fromLtoQ(a, c);
+		fromLtoQ(a, c);
 		q--;
 	}
 	while (r > 0) {
-		CM += fromLtoQ(b, c);
+		fromLtoQ(b, c);
 		r--;
 	}
-	return CM;
 }
 
-int splitList(List **S, List **a, List **b, int N) {
-	int CM = 0;
-
-	*a = *S; CM++;
-	*b = (*S)->next; CM++;
+void splitList(List **S, List **a, List **b, int N) {
+	*a = *S;
+	*b = (*S)->next;
 	int n = 0;
 	List *k = *a; 
 	List *p = *b;
 
 	while (p != NULL) {
 		n++;
-		k->next = p->next; CM++;
+		k->next = p->next;
 		k = p; 
-		p = p->next; CM++;
+		p = p->next;
 	}
-	return CM;
 }
 
-int mergeSort(List **S, int N) {
-	int CM = 0;
+void mergeSort(List **S, int N, tSortType sortType) {
 	int i, m, q, r;
 
 	int p;
 	List *a, *b;
 	Que c0, c1;
 	
-	CM += splitList(S, &a, &b, N);
+	splitList(S, &a, &b, N);
 
 	p = 1;
 	while (p < N) {
@@ -95,7 +107,10 @@ int mergeSort(List **S, int N) {
 			r = (m >= p) ? p : m;
 			m = m - r;
 			
-			CM += mergeSeries(&a, q, &b, r, i ? &c1 : &c0);
+			mergeSeries(&a, q, &b, r, i ? &c1 : &c0, 
+					sortType == sortDate ? isDateLessEq : 
+						sortType == sortStreet ? isStreetLessEq :
+							isDateStreetLessEq);
 			i = 1 - i;
 		}
 		a = c0.head; 
@@ -104,7 +119,6 @@ int mergeSort(List **S, int N) {
 	}
 	c0.tail->next = NULL;
 	*S = c0.head; 
-	return CM;
 }
 
 #endif

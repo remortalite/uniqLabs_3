@@ -12,29 +12,6 @@
 #include "struct.h"
 #include "mergeSort.h"
 
-/*
-struct record {
-	char person[32];
-	char street[18];
-	short int house;
-	short int apt;
-	char date[10];
-};
-
-typedef struct record2 {
-	char person[32*2];
-	char street[18*2];
-	short int house;
-	short int apt;
-	char date[10*2];
-} Record;
-
-typedef struct node Node;
-struct node {
-	Record data;
-	Node* next;
-};
-*/
 void from_866_to_utf8(char *in, size_t *sizein, char *out, size_t *sizeout) {
 	iconv_t cd = iconv_open("UTF-8", "CP866");
 	iconv(cd, &in, sizein, &out, sizeout);
@@ -68,13 +45,13 @@ void decode(struct record2* base2, struct record* base) {
 	}
 }
 
-void printRecord(Record record) {
+void printRecord(Record* record) {
 	printf("%-32s %-18s %-6d %-6d %-10s\n", 
-					record.person,
-					record.street,
-					record.house,
-					record.apt,
-					record.date
+					record->person,
+					record->street,
+					record->house,
+					record->apt,
+					record->date
 					);	
 }
 
@@ -98,7 +75,7 @@ void showPageList(Node* list, int page) {
 	}
 
 	for (int i = idx; i < (idx+N) && i < RECNUM; ++i) {
-		printRecord(list->data);
+		printRecord(list->pdata);
 		list = list->next;
 	}
 
@@ -155,12 +132,12 @@ Node* createNode() {
 Node* createList(Record* base) {
 	Node* list = createNode();
 	Node* head = list;
-	list->data = (base[0]);
+	list->pdata = base;
 	for (int i = 1; i < RECNUM; ++i) {
 		list->next = createNode();
 		list = list->next;
 
-		list->data = (base[i]);
+		list->pdata = (base + i);
 	}
 	return head;
 }
@@ -181,7 +158,13 @@ int main() {
 
 	Node* list = createList((Record*)base2);
 
-	mergeSort(&list, 4000);
+	mergeSort(&list, 4000, sortDateStreet);
+
+	Record** indexArray = calloc(sizeof(Record*), 4000);
+	Node *p = list;
+	for (int i = 0; i < 4000; ++i, p = p->next)
+		indexArray[i] = p->pdata;
+
 	showList(list);
 
 	return 0;

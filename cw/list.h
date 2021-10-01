@@ -8,10 +8,10 @@
 
 typedef Node List;
 
-List *addList(List *head, Record record) {
+List *addList(List *head, Record *record) {
 	List *new_node = calloc(1, sizeof(List));
 	new_node->next = head;
-	new_node->data = record;
+	new_node->pdata = record;
 	return new_node;
 }
 #endif

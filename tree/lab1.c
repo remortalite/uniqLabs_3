@@ -8,14 +8,6 @@
 
 #define MAXRAND 100
 
-void printTreeLeft(pVertex p) {
-	if (p != NULL) {
-		printTreeLeft(p->left);
-		printf("%d ", p->data);
-		printTreeLeft(p->right);
-	}
-}
-
 int getRandom() {
 	return rand() % MAXRAND;
 }
@@ -35,11 +27,12 @@ pVertex createTree() {
 
 int main() {
 	//srand(time(0));
-	printf("Lab1.\n");
+	printf("Lab0.\n");
 	
 	pVertex root = createTree();
 	printTreeLeft(root);
 
+	putchar('\n');
 	printf("Size: %d\n", treeSize(root));
 	printf("Height: %d\n", treeHeight(root));
 

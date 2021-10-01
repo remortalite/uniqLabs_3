@@ -1,6 +1,9 @@
 #ifndef TREE_H
 #define TREE_H
 
+#include <stdio.h>
+#include <stdlib.h>
+
 typedef struct Vertex tVertex;
 typedef tVertex* pVertex;
 
@@ -52,8 +55,17 @@ int sumAllLength(pVertex p, int L) {
     return sum;
 }
 
+// TODO: float f()
 int treeMeanHeight(pVertex p, int L) {
     return sumAllLength(p, L) / treeSize(p);
+}
+
+void printTreeLeft(pVertex p) {
+	if (p != NULL) {
+		printTreeLeft(p->left);
+		printf("%d ", p->data);
+		printTreeLeft(p->right);
+	}
 }
 
 #endif // #ifndef TREE_H

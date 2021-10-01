@@ -26,9 +26,9 @@ Que createQue() {
 	return que;
 }
 
-Que addQue(Que que, Record record) {
+Que addQue(Que que, Record* record) {
 	Qnode *new_node = calloc(1, sizeof(Qnode));
-	new_node->data = record;
+	new_node->pdata = record;
 	// TODO: вынести из функции, используется только однажды
 	if (que.head == NULL) {
 		que.head = new_node;
