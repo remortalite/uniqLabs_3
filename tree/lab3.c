@@ -26,7 +26,7 @@ pVertex SDP(int data, pVertex root) {
 int *createRandArray(int N) {
 	int *array = calloc(sizeof(int), N);
 	for (int i = 0; i < N; ++i) {
-		array[i] = rand() % 360;
+		array[i] = rand() % 960;
 	}
 	return array;
 }
@@ -68,6 +68,7 @@ int main() {
 	printf("\nPrint SDP: \n");
 	printTreeLeft(root);
 
+	/* SDP recursive */
 	printf("\nPrint SDPrec: \n");
 	pVertex root2 = NULL;
 	for (int i = 0; i < 100; ++i)
@@ -85,14 +86,14 @@ int main() {
 
 	printf("\n\n");
 	printf("%10s|%10s|%10s|%10s|%13s\n", "n=100","size","checksum","height","mean height");
-	printf("%10s|%10d|%10d|%10d|%10d\n", 
+	printf("%10s|%10d|%10d|%10d|%10.3f\n", 
 					"isdp",
 					treeSize(isdp_tree),
 					treeChecksum(isdp_tree),
 					treeHeight(isdp_tree),
 					treeMeanHeight(isdp_tree,1));
 
-	printf("%10s|%10d|%10d|%10d|%10d\n", 
+	printf("%10s|%10d|%10d|%10d|%10.3f\n", 
 					"sdp",
 					treeSize(sdp_tree),
 					treeChecksum(sdp_tree),

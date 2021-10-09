@@ -55,9 +55,8 @@ int sumAllLength(pVertex p, int L) {
     return sum;
 }
 
-// TODO: float f()
-int treeMeanHeight(pVertex p, int L) {
-    return sumAllLength(p, L) / treeSize(p);
+float treeMeanHeight(pVertex p, int L) {
+    return sumAllLength(p, L) * 1.0 / treeSize(p);
 }
 
 void printTreeLeft(pVertex p) {

@@ -122,7 +122,6 @@ void showList(Node* list) {
 	}
 }
 
-
 Node* createNode() {
 	Node* node = calloc(sizeof(Node), 1);
 	node->next = NULL;

@@ -37,7 +37,7 @@ int main() {
 	//checkSum(array, N);
 	
 	printf("Height: %d\n", treeHeight(root));
-	printf("Mean height: %d\n", treeMeanHeight(root, 1));
+	printf("Mean height: %.3f\n", treeMeanHeight(root, 1));
 
 
 	//example();
