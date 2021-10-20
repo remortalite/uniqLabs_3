@@ -33,20 +33,20 @@ int *createRandArray(int N) {
 
 pVertex SDPrec(int data, pVertex p) {
 	if (p == NULL) {
-		p = createVertex(data);
+		p = calloc(sizeof(tVertex), 1);
+		p->data = data;
 		p->left = NULL; p->right = NULL;
 	} else {
 		if (data < p->data)
-			p = SDPrec(data, p->left);
+			SDPrec(data, p->left);
 		else {
 			if (data > p->data)
-				p = SDPrec(data, p->right);
+				SDPrec(data, p->right);
 			else {
 				//printf("Exists\n");;
 			}
 		}
 	}
-	return p;
 }
 
 int main() {
@@ -70,9 +70,10 @@ int main() {
 
 	/* SDP recursive */
 	printf("\nPrint SDPrec: \n");
-	pVertex root2 = NULL;
-	for (int i = 0; i < 100; ++i)
-		root2 = SDPrec(array[i], root2);
+	pVertex root2 = SDPrec(array[0], NULL);
+	for (int i = 1; i < 100; ++i)
+		SDPrec(array[i], root2);
+	printf("%d %d %d\n", root2->data, root2->left, root2->right);
 	printTreeLeft(root2);
 
 	insertSort(array, 100);

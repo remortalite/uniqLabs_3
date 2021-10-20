@@ -39,4 +39,14 @@ Que addQue(Que que, Record* record) {
 	}
 	return que;
 }
+
+int sizeQue(Que que) {
+	Qnode* p = que.head;
+	int size = 0;
+	while (p != NULL) {
+		++size;
+		p = p->next;
+	}
+	return size;
+}
 #endif
