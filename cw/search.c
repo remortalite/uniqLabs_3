@@ -33,14 +33,6 @@ Que search(Record** indexArr, int size, int year) {
 	if (getYear(indexArr[R]) == year) {
 		printf("Найден:\n");
 		Record* record = indexArr[R];
-		printf("%-32s %-18s %-6d %-6d %-10s\n",
-                    record->person,
-                    record->street,
-                    record->house,
-                    record->apt,
-                    record->date
-                    );
-
 		que = createQueSort(que, indexArr, R, size);
 	} else {
 		printf("Не найден.\n");

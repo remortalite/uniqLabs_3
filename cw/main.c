@@ -123,36 +123,6 @@ void clearScreen() {
 
 void showList(Node*, int);
 
-void startSearch(Node* list) {
-
-	Record** indexArray = calloc(sizeof(Record*), 4000);
-	Node *p = list;
-	for (int i = 0; i < 4000; ++i, p = p->next)
-		indexArray[i] = p->pdata;
-
-	printf("Using the field 'year' as a key of the search.\n");
-	printf("Enter '0' to exit.\n");
-	printf("Valid year format: 94 (not 1994)\n");
-	int year;
-	while (1) {
-		printf("Please enter the year: ");
-		scanf("%d", &year);
-		if (year == 0) return; // exit
-		if (year > 0 && year < 100) break;
-		else {
-			printf("Use 94 if you want to search by 1994.\n");
-			printf("Year's range: (1-99)\n");
-			printf("Enter '0' to exit.\n");
-			printf("Try again!\n\n");
-		}
-	};
-
-	Que que;
-	que = search(indexArray, 4000, year);
-	
-	showQueSort(que.head, sizeQue(que));
-}
-
 int nextPage(int page, int size) {
 	if ((page+1) < (size/RECONPAGE + (size%RECONPAGE ? 1 : 0))) ++page;
 	return page;
@@ -164,7 +134,7 @@ int prevPage(int page, int size) {
 }
 
 int lastPage(int page, int size) {
-	return size/RECONPAGE+(size%RECONPAGE?1:0) - 1;
+	return size ? size/RECONPAGE+(size%RECONPAGE?1:0) - 1 : 0;
 }
 
 void showQueSort(Que que) {
@@ -203,6 +173,36 @@ void showQueSort(Que que) {
 					break;
 		}
 	}
+}
+
+void startSearch(Node* list) {
+
+	Record** indexArray = calloc(sizeof(Record*), 4000);
+	Node *p = list;
+	for (int i = 0; i < 4000; ++i, p = p->next)
+		indexArray[i] = p->pdata;
+
+	printf("Using the field 'year' as a key of the search.\n");
+	printf("Enter '0' to exit.\n");
+	printf("Valid year format: 94 (not 1994)\n");
+	int year;
+	while (1) {
+		printf("Please enter the year: ");
+		scanf("%d", &year);
+		if (year == 0) return; // exit
+		if (year > 0 && year < 100) break;
+		else {
+			printf("\nHint: Use 94 if you want to search by 1994.\n");
+			printf("Year's range: (1-99)\n");
+			printf("Enter '0' to exit.\n");
+			printf("Try again!\n\n");
+		}
+	};
+
+	Que que;
+	que = search(indexArray, 4000, year);
+	
+	showQueSort(que);
 }
 
 void showList(Node* list, int size) {
