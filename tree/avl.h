@@ -1,3 +1,6 @@
+#ifndef AVL_H
+#define AVL_H
+
 #include "tree.h"
 
 #define YES 1
@@ -140,3 +143,7 @@ pVertex addAVL(int data, pVertex p) {
 	}
 	return p;
 }
+
+
+
+#endif // #ifndef 
