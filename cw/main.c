@@ -94,6 +94,7 @@ void showPageList(Node* list, int page, int size) {
 	printHelp();
 }
 
+// TODO: fix (check until `tail` is reached)
 void showPageQue(Node* list, int page, int size) {
 	int N = RECONPAGE;
 	int idx = page*N;

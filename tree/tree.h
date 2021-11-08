@@ -11,6 +11,7 @@ struct Vertex {
 	int data;
 	pVertex left;
 	pVertex right;
+	int bal;
 };
 
 pVertex createVertex(int data) {

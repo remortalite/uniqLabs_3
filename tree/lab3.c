@@ -38,15 +38,16 @@ pVertex SDPrec(int data, pVertex p) {
 		p->left = NULL; p->right = NULL;
 	} else {
 		if (data < p->data)
-			SDPrec(data, p->left);
+			p->left = SDPrec(data, p->left);
 		else {
 			if (data > p->data)
-				SDPrec(data, p->right);
+				p->right = SDPrec(data, p->right);
 			else {
 				//printf("Exists\n");;
 			}
 		}
 	}
+	return p;
 }
 
 int main() {
@@ -69,11 +70,10 @@ int main() {
 	printTreeLeft(root);
 
 	/* SDP recursive */
-	printf("\nPrint SDPrec: \n");
+	printf("\n\nPrint SDPrec: \n");
 	pVertex root2 = SDPrec(array[0], NULL);
 	for (int i = 1; i < 100; ++i)
 		SDPrec(array[i], root2);
-	printf("%d %d %d\n", root2->data, root2->left, root2->right);
 	printTreeLeft(root2);
 
 	insertSort(array, 100);
