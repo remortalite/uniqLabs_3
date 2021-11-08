@@ -1,10 +1,11 @@
 #include "tree.h"
 #include "avl.h"
+#include "sdp.h"
 
 #include <stdio.h>
 #include <time.h>
 
-int check() {
+void check() {
 	pVertex tree = createVertex(4);
 	tree->right = createVertex(6);
 	tree->right->right = createVertex(7);
@@ -41,8 +42,6 @@ int check() {
 
 	printf("  _____%d_____  \n", tree->data);
 	printf("  %d          %d\n", tree->left->data, tree->right->data);
-	
-
 
 }
 
@@ -52,8 +51,8 @@ int main() {
 
 	int *array = calloc(100, sizeof(int));
 
-	for (int i = 0; i < 100; ++i) array[i] = rand() % 101;
-	//for (int i = 0; i < 100; ++i) printf("%d ", array[i]);
+	for (int i = 0; i < 100; ++i) array[i] = rand() % 100 + 1;
+	for (int i = 0; i < 100; ++i) printf("%d ", array[i]);
 	putchar('\n');
 
 	pVertex tree = NULL;
@@ -62,10 +61,29 @@ int main() {
 
 	printTreeLeft(tree);
 	putchar('\n');
-	printf("MeanHeight: %d\n", treeMeanHeight(tree, 1));
-	printf("Height: %d\n", treeHeight(tree));
-	printf("heightLeft: %d\n", treeHeight(tree->left));
-	printf("heightRight: %d\n", treeHeight(tree->right));
+
+	pVertex treeSDP = NULL;
+	for (int i = 0; i < 100; ++i) treeSDP = SDPrec(array[i], treeSDP);
+
+	printf("%-10s|%-10s|%-10s|%-10s|%-10s\n", "n=100", "size", "checksum", 
+			"height", "mean height");
+
+	printf("%-10s|%-10d|%-10d|%-10d|%-10f\n", 
+			"SDP", 
+			treeSize(treeSDP),
+			treeChecksum(treeSDP),
+			treeHeight(treeSDP),
+			treeMeanHeight(treeSDP, 1)
+	      );
+
+	printf("%-10s|%-10d|%-10d|%-10d|%-10f\n", 
+			"AVL", 
+			treeSize(tree),
+			treeChecksum(tree),
+			treeHeight(tree),
+			treeMeanHeight(tree, 1)
+	      );
+
 
 	return 0;
 }

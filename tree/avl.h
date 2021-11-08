@@ -23,6 +23,8 @@ pVertex LR(pVertex p) {
 	q = p->left;
 	r = q->right;
 
+	if (r == NULL) return p;
+
 	if (r->bal < 0)
 		p->bal = 1;
 	else
@@ -59,6 +61,8 @@ pVertex RL(pVertex p) {
 
 	q = p->right;
 	r = q->left;
+
+	if (r == NULL) return p;
 
 	if (r->bal > 0)
 		p->bal = -1;
