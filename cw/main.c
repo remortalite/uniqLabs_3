@@ -14,6 +14,8 @@
 #include "struct.h"
 #include "mergeSort.h"
 
+Que g_mergedQue;
+
 void from_866_to_utf8(char *in, size_t *sizein, char *out, size_t *sizeout) {
 	iconv_t cd = iconv_open("UTF-8", "CP866");
 	iconv(cd, &in, sizein, &out, sizeout);
@@ -95,21 +97,22 @@ void showPageList(Node* list, int page, int size) {
 }
 
 // TODO: fix (check until `tail` is reached)
-void showPageQue(Node* list, int page, int size) {
+void showPageQue(Que que, int page, int size) {
 	int N = RECONPAGE;
 	int idx = page*N;
 	printf("Search mode.\n");
 	printf("Page %d.\n", page);
 	
 	int count = 0;
+	Node* p = que.head;
 	while (count < idx && count < size) {
-		list = list->next;
+		p = p->next;
 		++count;
 	}
 
 	for (int i = idx; i < (idx+N) && i < size; ++i) {
-		printRecord(list->pdata);
-		list = list->next;
+		printRecord(p->pdata);
+		p = p->next;
 	}
 
 	printHelpQue();
@@ -142,33 +145,34 @@ void showQueSort(Que que) {
 	char c;
 	int page = 0;
 	int N = RECONPAGE;
+	printf("inside:\n");
 	int size = sizeQue(que);
 
-	Node* list = (Node*)que.head;
+	//Node* list = (Node*)que.head;
 
 	clearScreen();
-	showPageQue(list, page, size);
+	showPageQue(que, page, size);
 	while ((c = getc(stdin)) != 'q') {
 		switch(c) {
 				case 'd':
 					clearScreen();
 					page = nextPage(page, size);
-					showPageQue(list, page, size);
+					showPageQue(que, page, size);
 					break;
 				case 'a':
 					clearScreen();
 					page = prevPage(page, size);
-					showPageQue(list, page, size);
+					showPageQue(que, page, size);
 					break;
 				case 'l':
 					clearScreen();
 					page = lastPage(page, size);
-					showPageQue(list, page, size);
+					showPageQue(que, page, size);
 					break;
 				case 'k':
 					clearScreen();
 					page = 0;
-					showPageQue(list, page, size);
+					showPageQue(que, page, size);
 					break;
 				default:
 					break;
@@ -179,7 +183,7 @@ void showQueSort(Que que) {
 void startSearch(Node* list) {
 
 	Record** indexArray = calloc(sizeof(Record*), 4000);
-	Node *p = list;
+	Node* p = list;
 	for (int i = 0; i < 4000; ++i, p = p->next)
 		indexArray[i] = p->pdata;
 
@@ -201,7 +205,7 @@ void startSearch(Node* list) {
 	};
 
 	Que que;
-	que = search(indexArray, 4000, year);
+	que = search(g_mergedQue, indexArray, 4000, year);
 	
 	showQueSort(que);
 }
@@ -283,7 +287,7 @@ int main() {
 
 	Node* list = createList((Record*)base2);
 
-	mergeSort(&list, 4000, sortDateStreet);
+	g_mergedQue = mergeSort(&list, 4000, sortDateStreet);
 
 	showList(list, 4000);
 

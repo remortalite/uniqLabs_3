@@ -86,7 +86,7 @@ void splitList(List **S, List **a, List **b, int N) {
 	}
 }
 
-void mergeSort(List **S, int N, tSortType sortType) {
+Que mergeSort(List **S, int N, tSortType sortType) {
 	int i, m, q, r;
 
 	int p;
@@ -119,6 +119,7 @@ void mergeSort(List **S, int N, tSortType sortType) {
 	}
 	c0.tail->next = NULL;
 	*S = c0.head; 
+	return c0;
 }
 
 #endif

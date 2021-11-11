@@ -10,17 +10,26 @@ int getYear(Record* rec) {
 	return 0;
 }
 
-Que createQueSort(Que queSort, Record** indexArr, int idxStart, int size) {
+Que createQueSort(Que queSort, Que mergedQue, Record** indexArr, int idxStart, int size) {
+	Qnode* p;
+        p = mergedQue.head;
+
+	for (int i = 0; i < idxStart; ++i)
+		p = p->next;
+	queSort.head = p;
+
 	int year = getYear(indexArr[idxStart]);
-	for (int i = idxStart; i < size; ++i) {
-		if (getYear(indexArr[i]) != year)
+	for (int i = idxStart; i < size; ++i, p = p->next) {
+		if (getYear(indexArr[i]) != year) {
+			printf("create: %d -> %d\n", idxStart, i);
+			queSort.tail = p;
 			break;
-		queSort = addQue(queSort, indexArr[i]);
+		}
 	}
 	return queSort;
 }
 
-Que search(Record** indexArr, int size, int year) {
+Que search(Que mergedQue, Record** indexArr, int size, int year) {
 	Que que = createQue();
 	int L = 0, R = size-1, m;
 	while (L < R) {
@@ -33,7 +42,7 @@ Que search(Record** indexArr, int size, int year) {
 	if (getYear(indexArr[R]) == year) {
 		printf("Найден:\n");
 		Record* record = indexArr[R];
-		que = createQueSort(que, indexArr, R, size);
+		que = createQueSort(que, mergedQue, indexArr, R, size);
 	} else {
 		printf("Не найден.\n");
 	}
