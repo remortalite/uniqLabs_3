@@ -1,3 +1,6 @@
+#ifndef SEARCH_H
+#define SEARCH_H
+
 #include "struct.h"
 #include "que.h"
 
@@ -21,7 +24,6 @@ Que createQueSort(Que queSort, Que mergedQue, Record** indexArr, int idxStart, i
 	int year = getYear(indexArr[idxStart]);
 	for (int i = idxStart; i < size; ++i, p = p->next) {
 		if (getYear(indexArr[i]) != year) {
-			printf("create: %d -> %d\n", idxStart, i);
 			queSort.tail = p;
 			break;
 		}
@@ -49,3 +51,4 @@ Que search(Que mergedQue, Record** indexArr, int size, int year) {
 	return que;
 }
 
+#endif

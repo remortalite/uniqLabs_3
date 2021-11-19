@@ -3,7 +3,8 @@
 #include <string.h>
 #include <iconv.h>
 
-#include "search.c"
+#include "search.h"
+#include "dbtree.h"
 
 #define RECNUM 4000
 
@@ -59,6 +60,12 @@ void printRecord(Record* record) {
 					);	
 }
 
+void printSubRecord(Record* record) {
+	printf("\\_ ");
+	printRecord(record);
+}
+
+
 void printHelp() {
 	printf("\n\n\e[3mPress 'd' for the next page\n" \
 					"Press 'a' for the previous page\n" \
@@ -73,6 +80,7 @@ void printHelpQue() {
 					"Press 'a' for the previous page\n" \
 					"Press 'l' for the last page\n" \
 					"Press 'k' for the first page\n" \
+					"Press 't' to create tree\n" \
 					"Press 'q' to exit from search mode.\n\e[0m");
 }
 
@@ -96,7 +104,6 @@ void showPageList(Node* list, int page, int size) {
 	printHelp();
 }
 
-// TODO: fix (check until `tail` is reached)
 void showPageQue(Que que, int page, int size) {
 	int N = RECONPAGE;
 	int idx = page*N;
@@ -141,11 +148,55 @@ int lastPage(int page, int size) {
 	return size ? size/RECONPAGE+(size%RECONPAGE?1:0) - 1 : 0;
 }
 
+pTree createTree(Que que) {
+	pTree tree = NULL;
+	Qnode* p = que.head;
+	for (int i = 0; i < sizeQue(que); ++i) {
+		tree = addDBtree(p->pdata, tree);
+		p = p->next;
+	}
+	return tree;
+}
+
+void printTree(pTree p) {
+	if (p != NULL) {
+		printTree(p->left);
+		printf("* ");
+		printRecord(p->pdata);
+		pTree q = p->next;
+		while (q) {
+			printSubRecord(q->pdata);
+			q = q->next;
+		}
+		printTree(p->right);
+	}
+}
+
+pTree findSubTree(int apt, pTree p) {
+	pTree q = p;
+	while (q != NULL) {
+		if (q->pdata->apt > apt)
+			q = q->left;
+		else {
+			if (q->pdata->apt < apt)
+				q = q->right;
+			else
+				break;
+		}
+	}
+
+	if (q != NULL) {
+		if (q->pdata->apt == apt)
+			return q;
+	}
+
+	return NULL;
+}
+
 void showQueSort(Que que) {
 	char c;
 	int page = 0;
 	int N = RECONPAGE;
-	printf("inside:\n");
 	int size = sizeQue(que);
 
 	//Node* list = (Node*)que.head;
@@ -174,6 +225,30 @@ void showQueSort(Que que) {
 					page = 0;
 					showPageQue(que, page, size);
 					break;
+				case 't':
+					clearScreen();
+					pTree tree = createTree(que);
+					printTree(tree);
+
+					int apt;
+					printf("Enter the apt number: ");
+					scanf("%d", &apt);
+
+					pTree subtree = findSubTree(apt, tree);
+
+					printf("Apt: %d\n", apt);
+					if (subtree != NULL) {
+						pTree p = subtree;
+						while (p != NULL) {
+							printRecord(p->pdata);
+							p = p->next;
+						}
+					}
+					else {
+						printf("Not found.\n");
+					}
+					getchar();
+
 				default:
 					break;
 		}
