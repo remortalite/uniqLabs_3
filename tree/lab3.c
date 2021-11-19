@@ -6,6 +6,14 @@
 #include <stdlib.h>
 #include <time.h>
 
+int *createRandArray(int N) {
+	int *array = calloc(sizeof(int), N);
+	for (int i = 0; i < N; ++i) {
+		array[i] = rand() % 960;
+	}
+	return array;
+}
+
 pVertex SDP(int data, pVertex root) {
 	pVertex *p = &root;
 	while (*p != NULL) {
@@ -21,14 +29,6 @@ pVertex SDP(int data, pVertex root) {
 		(*p)->right = NULL;
 	}
 	return root;
-}
-
-int *createRandArray(int N) {
-	int *array = calloc(sizeof(int), N);
-	for (int i = 0; i < N; ++i) {
-		array[i] = rand() % 960;
-	}
-	return array;
 }
 
 pVertex SDPrec(int data, pVertex p) {

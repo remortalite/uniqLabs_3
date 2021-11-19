@@ -39,7 +39,6 @@ int main() {
 	printf("Height: %d\n", treeHeight(root));
 	printf("Mean height: %.3f\n", treeMeanHeight(root, 1));
 
-
 	//example();
 
 	return 0;
