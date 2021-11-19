@@ -1,77 +1,107 @@
-#include "main.h"
-#include "insertSort.h"
 #include "tree.h"
+#include "isdp.h"
+#include "insertSort.h"
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
-
-void example();
-
-pVertex createISDP(int *array, int idxStart, int idxEnd) {
-	if (idxStart > idxEnd) return NULL;
-	else {
-		int idxMean = (idxEnd + idxStart) / 2;
-		pVertex vertex = createVertex(array[idxMean]);
-		vertex->left = createISDP(array, idxStart, idxMean-1);
-		vertex->right = createISDP(array, idxMean+1, idxEnd);
-		return vertex;
+int *createRandArray(int N) {
+	int *array = calloc(sizeof(int), N);
+	for (int i = 0; i < N; ++i) {
+		array[i] = rand() % 960;
 	}
+	return array;
+}
+
+pVertex SDP(int data, pVertex root) {
+	pVertex *p = &root;
+	while (*p != NULL) {
+		if (data < (*p)->data) p = &((*p)->left);
+		else {
+			if (data > (*p)->data) p = &((*p)->right);
+			else break;
+		}
+	}
+	if (*p == NULL) {
+		(*p) = createVertex(data);
+		(*p)->left = NULL;
+		(*p)->right = NULL;
+	}
+	return root;
+}
+
+pVertex SDPrec(int data, pVertex p) {
+	if (p == NULL) {
+		p = calloc(sizeof(tVertex), 1);
+		p->data = data;
+		p->left = NULL; p->right = NULL;
+	} else {
+		if (data < p->data)
+			p->left = SDPrec(data, p->left);
+		else {
+			if (data > p->data)
+				p->right = SDPrec(data, p->right);
+			else {
+				//printf("Exists\n");;
+			}
+		}
+	}
+	return p;
 }
 
 int main() {
-	printf("Lab1.\n");
+	srand(time(0));
+	printf("Lab2.\n");
+	
+	pVertex root = NULL;
 
-	int N = 100;
-	int *array = calloc(sizeof(int), N);
-	FillInc(array, N);
+	printf("Array: ");
+	int *array = createRandArray(100);
+	for (int i = 0; i < 100; ++i) {
+		printf("%d ", array[i]);
+	}
+	putchar('\n'); putchar('\n');
 
-	pVertex root = createISDP(array, 0, N-1);
+	for (int i = 0; i < 100; ++i) 
+		root = SDP(array[i], root);
 
+	printf("\nPrint SDP: \n");
 	printTreeLeft(root);
 
-	putchar('\n');
-	putchar('\n');
-	printf("Size: %d\n", treeSize(root));
-	printf("Checksum tree: %d\n", treeChecksum(root));
-	//checkSum(array, N);
-	
-	printf("Height: %d\n", treeHeight(root));
-	printf("Mean height: %.3f\n", treeMeanHeight(root, 1));
+	/* SDP recursive */
+	printf("\n\nPrint SDPrec: \n");
+	pVertex root2 = SDPrec(array[0], NULL);
+	for (int i = 1; i < 100; ++i)
+		SDPrec(array[i], root2);
+	printTreeLeft(root2);
 
-	//example();
+	insertSort(array, 100);
+	pVertex isdp_tree = ISDP(array, 0, 99);
+	pVertex sdp_tree = NULL;
+	for (int i = 0; i < 100; ++i)
+		sdp_tree = SDP(array[i], sdp_tree);
+
+	printf("\n\nPrint ISDP: \n");
+	printTreeLeft(isdp_tree);
+
+	printf("\n\n");
+	printf("%10s|%10s|%10s|%10s|%13s\n", "n=100","size","checksum","height","mean height");
+	printf("%10s|%10d|%10d|%10d|%10.3f\n", 
+					"isdp",
+					treeSize(isdp_tree),
+					treeChecksum(isdp_tree),
+					treeHeight(isdp_tree),
+					treeMeanHeight(isdp_tree,1));
+
+	printf("%10s|%10d|%10d|%10d|%10.3f\n", 
+					"sdp",
+					treeSize(sdp_tree),
+					treeChecksum(sdp_tree),
+					treeHeight(sdp_tree),
+					treeMeanHeight(sdp_tree,1));
+
 
 	return 0;
 }
-
-void example() {
-
-	int N = 16;
-
-	int *array = calloc(sizeof(int), N);
-	FillInc(array, N);
-	printArr(array, N);
-
-	pVertex root = createISDP(array, 1, N-1);
-
-	printf("%d\n", root->data);
-	printf("%d\t\t%d\n", root->left->data, root->right->data);
-	printf("%d %d\t\t%d %d\n", 
-			root->left->left->data, root->left->right->data, 
-			root->right->left->data, root->right->right->data);
-	printf("%d %d %d %d\t\t%d %d %d %d\n", 
-			root->left->left->left->data, 
-			root->left->left->right->data, 
-			root->left->right->left->data, 
-			root->left->right->right->data, 
-
-			root->right->left->left->data, 
-			root->right->left->right->data, 
-			root->right->right->left->data, 
-			root->right->right->right->data
-	      );
-
-	printTreeLeft(root);
-}
-
 
