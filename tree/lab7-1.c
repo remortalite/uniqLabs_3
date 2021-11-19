@@ -1,5 +1,6 @@
 #include "tree.h"
 #include "dbtree.h"
+#include "avl.h"
 
 #include <stdio.h>
 #include <time.h>
@@ -20,30 +21,29 @@ int main() {
 
 	printTreeLeft(tree);
 	putchar('\n');
-/*
-	pVertex treeSDP = NULL;
-	for (int i = 0; i < 100; ++i) treeSDP = SDPrec(array[i], treeSDP);
 
 	printf("%-10s|%-10s|%-10s|%-10s|%-10s\n", "n=100", "size", "checksum", 
 			"height", "mean height");
 
-	printf("%-10s|%-10d|%-10d|%-10d|%-10f\n", 
-			"SDP", 
-			treeSize(treeSDP),
-			treeChecksum(treeSDP),
-			treeHeight(treeSDP),
-			treeMeanHeight(treeSDP, 1)
-	      );
+	pVertex treeAVL = NULL;
+	for (int i = 0; i < 100; ++i) treeAVL = addAVL(array[i], treeAVL);
 
 	printf("%-10s|%-10d|%-10d|%-10d|%-10f\n", 
 			"AVL", 
+			treeSize(treeAVL),
+			treeChecksum(treeAVL),
+			treeHeight(treeAVL),
+			treeMeanHeight(treeAVL, 1)
+	      );
+
+	printf("%-10s|%-10d|%-10d|%-10d|%-10f\n", 
+			"DBD", 
 			treeSize(tree),
 			treeChecksum(tree),
 			treeHeight(tree),
 			treeMeanHeight(tree, 1)
 	      );
 
-*/
 	return 0;
 }
 
