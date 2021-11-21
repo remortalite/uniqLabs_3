@@ -231,7 +231,7 @@ void showQueSort(Que que) {
 					printTree(tree);
 
 					int apt;
-					printf("Enter the apt number: ");
+					printf("\nEnter the apt number: ");
 					scanf("%d", &apt);
 
 					pTree subtree = findSubTree(apt, tree);
