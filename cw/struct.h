@@ -29,4 +29,9 @@ typedef enum SORTTYPE {
 	sortDateStreet
 } tSortType;
 
+struct dict {
+	char c;
+	int n;
+};
+
 #endif // #ifndef STRUCT_H
