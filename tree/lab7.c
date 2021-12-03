@@ -7,7 +7,7 @@
 
 int main() {
 	srand(time(0));
-	printf("Двоичное Б-дерево\n");
+	printf("Дерево оптимального поиска (точный алгоритм)\n");
 
 	int *array = calloc(100, sizeof(int));
 

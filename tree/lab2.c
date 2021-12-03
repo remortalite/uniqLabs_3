@@ -75,13 +75,13 @@ int main() {
 	for (int i = 1; i < 100; ++i)
 		SDPrec(array[i], root2);
 	printTreeLeft(root2);
-
-	insertSort(array, 100);
-	pVertex isdp_tree = ISDP(array, 0, 99);
 	pVertex sdp_tree = NULL;
 	for (int i = 0; i < 100; ++i)
 		sdp_tree = SDP(array[i], sdp_tree);
 
+
+	insertSort(array, 100);
+	pVertex isdp_tree = ISDP(array, 0, 99);
 	printf("\n\nPrint ISDP: \n");
 	printTreeLeft(isdp_tree);
 
@@ -100,7 +100,6 @@ int main() {
 					treeChecksum(sdp_tree),
 					treeHeight(sdp_tree),
 					treeMeanHeight(sdp_tree,1));
-
 
 	return 0;
 }

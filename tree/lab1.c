@@ -24,10 +24,14 @@ int main() {
 
 	int N = 100;
 	int *array = calloc(sizeof(int), N);
+	
 	FillInc(array, N);
+	//for (int i = 0; i < N; i++) array[i] = rand() % 2000;
+	//insertSort(array, N);
 
 	pVertex root = createISDP(array, 0, N-1);
 
+	printf("Print tree:\n");
 	printTreeLeft(root);
 
 	putchar('\n');

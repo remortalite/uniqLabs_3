@@ -51,7 +51,7 @@ int main() {
 
 	int *array = calloc(100, sizeof(int));
 
-	for (int i = 0; i < 100; ++i) array[i] = rand() % 100 + 1;
+	for (int i = 0; i < 100; ++i) array[i] = rand() % 23452 + 1;
 	for (int i = 0; i < 100; ++i) printf("%d ", array[i]);
 	putchar('\n');
 
@@ -64,6 +64,8 @@ int main() {
 
 	pVertex treeSDP = NULL;
 	for (int i = 0; i < 100; ++i) treeSDP = SDPrec(array[i], treeSDP);
+
+	pVertex treeISDP = NULL;
 
 	printf("%-10s|%-10s|%-10s|%-10s|%-10s\n", "n=100", "size", "checksum", 
 			"height", "mean height");

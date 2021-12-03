@@ -5,11 +5,11 @@
 #include <stdio.h>
 
 int main() {
-	printf("Delete from AVL\n\n");
+	printf("-- Delete from AVL\n\n");
 
 	pVertex tree = NULL;
 
-	int N = 15;
+	int N = 10;
 	int *array = malloc(sizeof(int)*N);
 	for (int i = 0; i < N; ++i) array[i] = rand() % 300;
 	for (int i = 0; i < N; ++i) tree = addAVL(array[i], tree);

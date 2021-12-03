@@ -32,6 +32,7 @@ typedef enum SORTTYPE {
 struct dict {
 	char c;
 	int n;
+	char* code;
 };
 
 #endif // #ifndef STRUCT_H
