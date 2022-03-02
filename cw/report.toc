@@ -1,0 +1,15 @@
+\babel@toc {russian}{}
+\contentsline {section}{\numberline {1}Постановка задачи}{2}{section.1}%
+\contentsline {section}{\numberline {2}Основные идеи и характеристики применяемых методов}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Метод сортировки MergeSort}{2}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Двоичный поиск}{2}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Списки и очереди}{2}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Вид дерева и поиск}{3}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Метод кодирования}{3}{subsection.2.5}%
+\contentsline {section}{\numberline {3}Описание структур данных и использованных алгоритмов}{3}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Использованные структуры данных}{3}{subsection.3.1}%
+\contentsline {section}{\numberline {4}Описание программы}{3}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Описание подпрограмм}{3}{subsection.4.1}%
+\contentsline {section}{\numberline {5}Скриншоты}{5}{section.5}%
+\contentsline {section}{\numberline {6}Выводы}{6}{section.6}%
+\contentsline {section}{\numberline {7}Код программы}{8}{section.7}%

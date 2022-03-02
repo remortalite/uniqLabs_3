@@ -5,6 +5,7 @@
 
 #include "search.h"
 #include "dbtree.h"
+#include "coding.h"
 
 #define RECNUM 4000
 
@@ -72,6 +73,7 @@ void printHelp() {
 					"Press 'l' for the last page\n" \
 					"Press 'k' for the first page\n" \
 					"Press 's' for the search\n" \
+					"Press 'c' for the coding\n" \
 					"Press 'q' to exit\n\e[0m");
 }
 
@@ -319,6 +321,15 @@ void showList(Node* list, int size) {
 					startSearch(list);
 					clearScreen();
 					page = 0;
+					showPageList(list, page, size);
+					break;
+				case 'c':
+					clearScreen();
+					printf("Fano coding.");
+					runCoding();
+
+					getchar();
+					clearScreen();
 					showPageList(list, page, size);
 					break;
 				default:

@@ -1,2 +1,9 @@
 *.out
 *.swp
+*.gch
+*.aux
+*.fdb*
+*.fls
+*.log
+*.gz
+*.toc

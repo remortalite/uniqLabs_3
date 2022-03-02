@@ -30,7 +30,7 @@ typedef enum SORTTYPE {
 } tSortType;
 
 struct dict {
-	char c;
+	unsigned char c;
 	int n;
 	char* code;
 };

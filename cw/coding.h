@@ -6,47 +6,26 @@
 #include <stdlib.h>
 #include <math.h>
 
-int main() {
-	printf("Coding.\n");
-
+int runCoding() {
 	FILE *fp;
 	fp = fopen("testBase4.dat", "rb");
-	if (fp == NULL) printf("File 'textBase4.dat' not found.\n");
+	if (fp == NULL) {
+		printf("File 'textBase4.dat' not found.\n");
+		return 1;
+	}
 
 	int allSymbols = 4000*(32+18+10+2);
 
 	printf("Size: %d\n", allSymbols);
 	struct record* records = malloc(sizeof(struct record)*4000);
 	unsigned char* text = malloc(sizeof(unsigned char)*allSymbols);
-	//unsigned char* text = (unsigned char*) records;
 
-	//***
-	//int i = fread(records, sizeof(struct record), 4000, fp);
 	int i = fread(text, sizeof(unsigned char), allSymbols, fp);
 	if (i == 4000) printf("Read succesfully!\n");
 
 	struct dict* unique = malloc(sizeof(struct dict)*allSymbols);
 	int uniqueCount = 0;
 
-	//***
-/*
-	int index = 0;
-	for (int i = 0; i < 4000; ++i) {
-		for (int j = 0; j < 32; ++j) text[index++] = records[i].person[j];
-		for (int j = 0; j < 18; ++j) text[index++] = records[i].street[j];
-		
-		unsigned char strHouse[10];
-		sprintf(strHouse, "%03d", records[i].house);
-		for (int j=0; j < strlen(strHouse); ++j) text[index++] = strHouse[j];
-
-		unsigned char strApt[10];
-		sprintf(strApt, "%03d", records[i].apt); 
-		for (int j=0; j < strlen(strApt); ++j) text[index++] = strApt[j];
-	}
-
-	printf("Size (index): %d\n", index);
-	allSymbols = index;
-*/
 	for (int i = 0; i < allSymbols; ++i) {
 		int found = 0;
 		for (int j = 0; j < uniqueCount; ++j) {
@@ -95,21 +74,6 @@ int main() {
 	printf("Entropy \tH = %.4f\n", -H);
 	printf("Lmean \t\tL = %.4f\n", Lmean);
 
-	// for (int i = 0; i < uniqueCount; ++i) printf("%c %.4f\n", unique[i].c, P[i]);
-	
-	#ifdef WRITE_UNIQUE
-		FILE* fout;
-		fout = fopen("unique.txt", "w");
-		for (int i = 0; i < uniqueCount; ++i) {
-			fprintf(fout, "%c %d ", unique[i].c, unique[i].n);
-			for (int j = 0; j < Length[i]; ++j)
-				fprintf(fout, "%d", C[i][j]);
-			fprintf(fout, "\n");
-		}
-		fclose(fout);
-		system("iconv -f cp866 -t utf8 unique.txt -o unique.txt");
-	#endif
-
 	for (int i = 0; i < uniqueCount; ++i) {
 		unique[i].code = calloc(sizeof(char), Length[i]+1);
 		for (int j = 0; j < Length[i]; ++j)
@@ -117,19 +81,7 @@ int main() {
 		unique[i].code[Length[i]] = '\0';
 	}
 
-	FILE * foutCode;
-	foutCode = fopen("code.dat", "wb");
-	for (int i = 0; i < allSymbols; ++i) {
-		for (int j = 0; j < uniqueCount; ++j)
-			if (unique[j].c == text[i]) {
-				for (int k = 0; k < Length[j]; ++k) {
-					fwrite(unique[j].code+k, 1,1, foutCode);
-				}
-				continue;
-			}
-	}
-
-	// double sum = 0.0; for (int i = 0; i < uniqueCount; ++i) sum += (P[i]); printf("Sum: %lf\n", sum);
+	getchar();
 
 	return 0;
 }
